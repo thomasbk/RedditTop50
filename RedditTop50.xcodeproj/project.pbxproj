@@ -56,12 +56,20 @@
 			children = (
 				F9C4C6E21F1955A0002AD182 /* AppDelegate.swift */,
 				F9C4C6E41F1955A0002AD182 /* ViewController.swift */,
+				F9C4C6F41F19591F002AD182 /* Views */,
 				F9C4C6E61F1955A0002AD182 /* Main.storyboard */,
 				F9C4C6E91F1955A0002AD182 /* Assets.xcassets */,
 				F9C4C6EB1F1955A0002AD182 /* LaunchScreen.storyboard */,
 				F9C4C6EE1F1955A0002AD182 /* Info.plist */,
 			);
 			path = RedditTop50;
+			sourceTree = "<group>";
+		};
+		F9C4C6F41F19591F002AD182 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
