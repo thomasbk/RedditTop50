@@ -11,7 +11,6 @@ import UIKit
 
 class ViewController: UIViewController,UITableViewDataSource, UITableViewDelegate {
     
-    
     let defaultSession = URLSession(configuration: .default)
     var dataTask: URLSessionDataTask?
     var errorMessage = ""
