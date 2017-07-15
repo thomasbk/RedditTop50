@@ -16,6 +16,8 @@ class RedditTableViewCell: UITableViewCell {
     @IBOutlet var commentsLabel: UILabel!
     @IBOutlet var myImageView: UIImageView!
     
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -26,5 +28,6 @@ class RedditTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+    
 
 }
