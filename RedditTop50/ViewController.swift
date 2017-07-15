@@ -11,16 +11,13 @@ import UIKit
 
 class ViewController: UIViewController,UITableViewDataSource, UITableViewDelegate {
     
-    // Set up the URL request
-    let redditURL: String = "https://www.reddit.com/top/.json"
-    
     let defaultSession = URLSession(configuration: .default)
     var dataTask: URLSessionDataTask?
     var errorMessage = ""
     
-    var after: String?
+    var after: String? = ""
     var list: [Dictionary<String, Any>] = []
-    //var list: Array<Dictionary> = [] as! Array<Dictionary>
+    let redditURL: String = "https://www.reddit.com/top/.json"
     
     
     
@@ -52,7 +49,7 @@ class ViewController: UIViewController,UITableViewDataSource, UITableViewDelegat
     func getData () {
         
         //
-        guard let url = URL(string: redditURL) else {
+        guard let url = URL(string: "\(redditURL)\(String(describing: after!))" ) else {
             print("Error: cannot create URL")
             return
         }
@@ -95,8 +92,13 @@ class ViewController: UIViewController,UITableViewDataSource, UITableViewDelegat
                 print("The title is: " + title)
                 
                 let dataDictionary: Dictionary = topReddit["data"] as! Dictionary<String, Any>
-                self.after = dataDictionary["after"] as? String
-                self.list = dataDictionary["children"] as! Array
+                if(self.list.count > 0) {
+                    self.list.append(contentsOf: dataDictionary["children"] as! Array)
+                }
+                else {
+                    self.list = dataDictionary["children"] as! Array
+                }
+                self.after = "?after=\(String(describing: dataDictionary["after"] as! String))"
                 
                 //print(self.after!)
                 //print(self.list)
@@ -149,22 +151,37 @@ class ViewController: UIViewController,UITableViewDataSource, UITableViewDelegat
         
         cell.titleLabel.text = postData?["title"] as? String
         
-        let time = getElapsedTime(postTime: (postData?["created"] as? NSNumber)!)
+        let time = getElapsedTime(postTime: (postData?["created_utc"] as? NSNumber)!)
         cell.dateLabel.text = " \(time) ago by \(String(describing: postData?["author"] as! String))"
         
         cell.commentsLabel.text = "\(String(describing: postData?["num_comments"] as! NSNumber)) comments"
         
         if let image = (postData?["thumbnail"] as? String) {
-            if(image == "default" || image == "nsfw") {
-                cell.myImageView.image = nil
-            }
-            else {
+            if(verifyUrl(urlString: image)) {
                 cell.myImageView.loadImageUsingCacheWithUrl(urlString: image)
             }
+            else {
+                //image == "default" || image == "nsfw"
+                cell.myImageView.image = nil
+            }
+        }
+        
+        if(indexPath.row+1 == list.count) {
+            getData()
         }
         
         
         return cell
+    }
+    
+    
+    func verifyUrl (urlString: String?) -> Bool {
+        if let urlString = urlString {
+            if let url  = NSURL(string: urlString) {
+                return UIApplication.shared.canOpenURL(url as URL)
+            }
+        }
+        return false
     }
     
     
