@@ -23,8 +23,6 @@ class ViewController: UIViewController,UITableViewDataSource, UITableViewDelegat
     
     var selectedImageURL: String?
     
-    //var redditList = RedditList()
-    
     
     @IBOutlet var tableView: UITableView!
     let cellIdentifier = "redditCell"
@@ -48,8 +46,6 @@ class ViewController: UIViewController,UITableViewDataSource, UITableViewDelegat
      
      // In a storyboard-based application, you will often want to do a little preparation before navigation
      override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
         let viewController = segue.destination as! ImageViewController
         viewController.imageURL = selectedImageURL
      }
@@ -60,7 +56,6 @@ class ViewController: UIViewController,UITableViewDataSource, UITableViewDelegat
     
     func getData () {
         
-        //
         guard let url = URL(string: "\(redditURL)\(String(describing: after!))" ) else {
             print("Error: cannot create URL")
             return
@@ -84,24 +79,19 @@ class ViewController: UIViewController,UITableViewDataSource, UITableViewDelegat
                 print("Error: did not receive data")
                 return
             }
-            // parse the result as JSON, since that's what the API provides
+            // parse the result as JSON
             do {
                 guard let topReddit = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: AnyObject] else {
                     print("error trying to convert data to JSON")
                     return
                 }
-                // now we have the todo, let's just print it to prove we can access it
-                //print("The topReddit is: " + topReddit.description)
                 
-                // the todo object is a dictionary
-                // so we just access the title using the "title" key
-                // so check for a title and print it if we have one
-                guard let title = topReddit["kind"] as? String else {
-                    print("Could not get todo title from JSON")
+                guard let kind = topReddit["kind"] as? String else {
+                    print("Could not get reddit kind from JSON")
                     return
                 }
                 
-                print("The title is: " + title)
+                print("The kind is: " + kind)
                 
                 let dataDictionary: Dictionary = topReddit["data"] as! Dictionary<String, Any>
                 if(self.list.count > 0) {
@@ -110,11 +100,10 @@ class ViewController: UIViewController,UITableViewDataSource, UITableViewDelegat
                 else {
                     self.list = dataDictionary["children"] as! Array
                 }
+                // set the after text for next load
                 self.after = "?after=\(String(describing: dataDictionary["after"] as! String))"
                 
-                //print(self.after!)
-                //print(self.list)
-                
+                // reload data on main thread
                 DispatchQueue.main.async(execute: { () -> Void in
                     self.tableView.reloadData()
                 })
@@ -154,30 +143,29 @@ class ViewController: UIViewController,UITableViewDataSource, UITableViewDelegat
         
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath as IndexPath) as! RedditTableViewCell
         
-        let post = list[indexPath.row] //as! Dictionary<String,String>
-        //print(post)
+        let post = list[indexPath.row]
         let postData = post["data"] as? [String:Any]
-        print("POOP")
-        print(postData!)
+        //print(postData!)
         
         
         cell.titleLabel.text = postData?["title"] as? String
         
-        let time = getElapsedTime(postTime: (postData?["created_utc"] as? NSNumber)!)
+        let time = getElapsedTime(postTime: (postData?["created"] as? NSNumber)!)
         cell.dateLabel.text = " \(time) ago by \(String(describing: postData?["author"] as! String))"
         
         cell.commentsLabel.text = "\(String(describing: postData?["num_comments"] as! NSNumber)) comments"
         
-        if let image = (postData?["thumbnail"] as? String) {
+        if let image = (postData?["thumbnail"] as? String) { // check if it's a valid url
             if(verifyUrl(urlString: image)) {
                 cell.myImageView.loadImageUsingCacheWithUrl(urlString: image)
             }
             else {
-                //image == "default" || image == "nsfw"
+                //image == "default" || image == "nsfw" // this are other data types that aren't images
                 cell.myImageView.image = nil
             }
         }
         
+        // load next 25 until it reaches 50
         if(indexPath.row+1 == list.count && list.count < MAX_COUNT) {
             getData()
         }
@@ -187,6 +175,7 @@ class ViewController: UIViewController,UITableViewDataSource, UITableViewDelegat
     }
     
     
+    // Checks if a given string is a URL
     func verifyUrl (urlString: String?) -> Bool {
         if let urlString = urlString {
             if let url  = NSURL(string: urlString) {
@@ -197,7 +186,7 @@ class ViewController: UIViewController,UITableViewDataSource, UITableViewDelegat
     }
     
     
-    
+    // Gets elapsed time between given value and now
     func getElapsedTime (postTime: NSNumber) -> String {
         var result = "hour"
         var number = 0
@@ -266,25 +255,21 @@ class ViewController: UIViewController,UITableViewDataSource, UITableViewDelegat
     
     
     
+    // MARK: -
+    // MARK: State Restore Delegate Methods
     
     override func encodeRestorableState(with coder: NSCoder) {
-        
-        //if let petId = petId {
-        //    coder.encodeInteger(petId, forKey: "petId")
-        //}
         
         super.encodeRestorableState(with: coder)
     }
     
     override func decodeRestorableState(with coder: NSCoder) {
-        //petId = coder.decodeIntegerForKey("petId")
-        
+
         super.decodeRestorableState(with: coder)
     }
     
     override func applicationFinishedRestoringState() {
-        //guard let petId = petId else { return }
-        //currentPet = MatchedPetsManager.sharedManager.petForId(petId)
+        
     }
 
 

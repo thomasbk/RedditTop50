@@ -30,7 +30,7 @@ class ImageViewController: UIViewController {
     }
     
     
-    
+    // Save image to photo album
     @IBAction func saveImage () {
     
         if let image = imageView.image {
@@ -39,6 +39,7 @@ class ImageViewController: UIViewController {
         }
     }
     
+    // Finished saving the image
     func image(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
         if let error = error {
             let ac = UIAlertController(title: "Save error", message: error.localizedDescription, preferredStyle: .alert)
@@ -59,28 +60,22 @@ class ImageViewController: UIViewController {
     }
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
     
+    
+    // MARK: -
+    // MARK: State Restore Delegate Methods
     
     override func encodeRestorableState(with coder: NSCoder) {
         
         if let imageURL = imageURL {
-            coder.encode(imageURL)//(imageURL, forKey: "imageURL")
+            coder.encode(imageURL)
         }
         
         super.encodeRestorableState(with: coder)
     }
     
     override func decodeRestorableState(with coder: NSCoder) {
-        //petId = coder.decodeIntegerForKey("petId")
+        
         imageURL = coder.decodeObject() as? String
         
         super.decodeRestorableState(with: coder)
