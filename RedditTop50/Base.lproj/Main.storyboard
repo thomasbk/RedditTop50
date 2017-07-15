@@ -248,7 +248,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WAh-94-Zcx">
-                                <rect key="frame" x="70" y="558" width="235" height="63"/>
+                                <rect key="frame" x="86" y="560" width="203" height="63"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                 <state key="normal" title="Save image" backgroundImage="button.png">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -261,14 +261,14 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="iEa-aI-DR6" firstAttribute="centerX" secondItem="WAh-94-Zcx" secondAttribute="centerX" id="0gM-ZR-ExG"/>
-                            <constraint firstItem="5FK-TD-RJh" firstAttribute="top" secondItem="WAh-94-Zcx" secondAttribute="bottom" constant="46" id="1S7-in-vjG"/>
+                            <constraint firstItem="5FK-TD-RJh" firstAttribute="top" secondItem="WAh-94-Zcx" secondAttribute="bottom" constant="44" id="1S7-in-vjG"/>
                             <constraint firstAttribute="trailingMargin" secondItem="PkF-7e-K3j" secondAttribute="trailing" constant="-16" id="1eA-yh-fXo"/>
                             <constraint firstItem="iEa-aI-DR6" firstAttribute="centerY" secondItem="PkF-7e-K3j" secondAttribute="centerY" id="Huy-KC-zWk"/>
-                            <constraint firstItem="WAh-94-Zcx" firstAttribute="top" secondItem="PkF-7e-K3j" secondAttribute="bottom" constant="24" id="I8K-yp-SbW"/>
+                            <constraint firstItem="WAh-94-Zcx" firstAttribute="top" secondItem="PkF-7e-K3j" secondAttribute="bottom" constant="26" id="I8K-yp-SbW"/>
                             <constraint firstItem="PkF-7e-K3j" firstAttribute="leading" secondItem="LhZ-81-ZUG" secondAttribute="leading" id="LvE-hN-Wpf"/>
                             <constraint firstItem="WAh-94-Zcx" firstAttribute="centerX" secondItem="PkF-7e-K3j" secondAttribute="centerX" id="SBg-ME-leq"/>
                             <constraint firstItem="5FK-TD-RJh" firstAttribute="top" secondItem="PkF-7e-K3j" secondAttribute="bottom" constant="133" id="SZe-zU-s2s"/>
-                            <constraint firstItem="WAh-94-Zcx" firstAttribute="leading" secondItem="LhZ-81-ZUG" secondAttribute="leadingMargin" constant="54" id="Z2P-OK-bX5"/>
+                            <constraint firstItem="WAh-94-Zcx" firstAttribute="leading" secondItem="LhZ-81-ZUG" secondAttribute="leadingMargin" constant="70" id="Z2P-OK-bX5"/>
                             <constraint firstItem="PkF-7e-K3j" firstAttribute="top" secondItem="aaI-bP-Gke" secondAttribute="bottom" id="jNP-Eu-sd0"/>
                         </constraints>
                     </view>
