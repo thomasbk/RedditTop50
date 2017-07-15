@@ -19,7 +19,9 @@ class ViewController: UIViewController,UITableViewDataSource, UITableViewDelegat
     var list: [Dictionary<String, Any>] = []
     let redditURL: String = "https://www.reddit.com/top/.json"
     
+    let MAX_COUNT = 50
     
+    var selectedImageURL: String?
     
     //var redditList = RedditList()
     
@@ -42,6 +44,16 @@ class ViewController: UIViewController,UITableViewDataSource, UITableViewDelegat
     
     
     
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+        let viewController = segue.destination as! ImageViewController
+        viewController.imageURL = selectedImageURL
+     }
+ 
     
     
     
@@ -166,7 +178,7 @@ class ViewController: UIViewController,UITableViewDataSource, UITableViewDelegat
             }
         }
         
-        if(indexPath.row+1 == list.count) {
+        if(indexPath.row+1 == list.count && list.count < MAX_COUNT) {
             getData()
         }
         
@@ -218,6 +230,61 @@ class ViewController: UIViewController,UITableViewDataSource, UITableViewDelegat
         
         tableView.deselectRow(at: indexPath, animated: true)
         
+        let post = list[indexPath.row]
+        let postData = post["data"] as? [String:Any]
+        
+        let postHint = postData?["post_hint"] as? String
+        
+        if(postHint == "image") {
+            selectedImageURL = postData?["url"] as? String
+            performSegue(withIdentifier: "imgSegue", sender: nil)
+        }
+        else {
+            
+            let optionMenu = UIAlertController(title: nil, message:
+                "This post is not an image, would you like to open it in your browser?", preferredStyle: .actionSheet)
+            optionMenu.popoverPresentationController?.sourceView = self.view
+            
+            
+            let showBrowser = UIAlertAction(title: "Show in browser", style: .default) { action -> Void in
+                
+                let url = NSURL(string: (postData?["url"] as? String)!)!
+                if #available(iOS 10.0, *) {
+                    UIApplication.shared.open(url as URL, options: [:], completionHandler: nil)
+                } else {
+                    UIApplication.shared.openURL(url as URL)
+                }
+            }
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (alert : UIAlertAction!) in
+            }
+            optionMenu.addAction(showBrowser)
+            optionMenu.addAction(cancelAction)
+            self.present(optionMenu, animated: true, completion: nil)
+        }
+        
+    }
+    
+    
+    
+    
+    override func encodeRestorableState(with coder: NSCoder) {
+        
+        //if let petId = petId {
+        //    coder.encodeInteger(petId, forKey: "petId")
+        //}
+        
+        super.encodeRestorableState(with: coder)
+    }
+    
+    override func decodeRestorableState(with coder: NSCoder) {
+        //petId = coder.decodeIntegerForKey("petId")
+        
+        super.decodeRestorableState(with: coder)
+    }
+    
+    override func applicationFinishedRestoringState() {
+        //guard let petId = petId else { return }
+        //currentPet = MatchedPetsManager.sharedManager.petForId(petId)
     }
 
 
